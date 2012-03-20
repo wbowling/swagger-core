@@ -20,7 +20,7 @@ import com.wordnik.swagger.core._
 
 import org.slf4j.LoggerFactory
 
-import com.sun.jersey.api.core.ResourceConfig
+import javax.ws.rs.core.Application
 
 import javax.servlet.ServletConfig
 
@@ -35,7 +35,7 @@ trait Help {
   @ApiOperation(value = "Returns information about API parameters",
     responseClass = "com.wordnik.swagger.core.Documentation")
   def getHelp(@Context sc: ServletConfig,
-    @Context rc: ResourceConfig,
+    @Context rc: Application,
     @Context headers: HttpHeaders,
     @Context uriInfo: UriInfo): Response = {
     val reader = ConfigReaderFactory.getConfigReader(sc)

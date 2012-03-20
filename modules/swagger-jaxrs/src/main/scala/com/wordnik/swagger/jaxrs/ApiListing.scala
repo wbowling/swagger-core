@@ -20,7 +20,7 @@ import com.wordnik.swagger.core._
 
 import org.slf4j.LoggerFactory
 
-import com.sun.jersey.api.core.ResourceConfig
+import javax.ws.rs.core.Application
 
 import javax.ws.rs.{ Path, GET }
 import javax.ws.rs.core.{ UriInfo, HttpHeaders, Context, Response }
@@ -35,7 +35,7 @@ trait ApiListing {
   @ApiOperation(value = "Returns list of all available api endpoints",
     responseClass = "DocumentationEndPoint", multiValueResponse = true)
   def getAllApis(@Context sc: ServletConfig,
-    @Context rc: ResourceConfig,
+    @Context rc: Application,
     @Context headers: HttpHeaders,
     @Context uriInfo: UriInfo): Response = {
 
@@ -55,7 +55,7 @@ trait ApiListing {
       }
     }
 
-    val resources = rc.getRootResourceClasses
+    val resources = rc.getClasses
     val apiListingEndpoint = this.getClass.getAnnotation(classOf[Api])
     val resourceListingType = this.getClass.getAnnotation(classOf[javax.ws.rs.Produces]).value.toSet
 

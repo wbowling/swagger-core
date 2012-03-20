@@ -24,11 +24,11 @@ import javax.ws.rs.core.Response.Status
 import javax.ws.rs._
 import org.codehaus.jackson.JsonGenerationException
 import org.codehaus.jackson.map.JsonMappingException
-import com.sun.jersey.api.core.ResourceConfig
+import javax.ws.rs.core.Application
 import com.wordnik.swagger.core._
 
 abstract class JavaHelp {
-  @GET def getHelp(@Context servConfig: ServletConfig, @Context resConfig: ResourceConfig, @Context headers: HttpHeaders, @Context uriInfo: UriInfo): Response = {
+  @GET def getHelp(@Context servConfig: ServletConfig, @Context resConfig: Application, @Context headers: HttpHeaders, @Context uriInfo: UriInfo): Response = {
     var configReader: ConfigReader = ConfigReaderFactory.getConfigReader(servConfig)
     var apiVersion: String = configReader.getApiVersion
     var swaggerVersion: String = configReader.getSwaggerVersion
