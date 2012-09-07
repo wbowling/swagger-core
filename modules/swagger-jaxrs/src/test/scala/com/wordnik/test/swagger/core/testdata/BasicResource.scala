@@ -17,9 +17,7 @@
 package com.wordnik.test.swagger.core.testdata
 
 import com.wordnik.swagger.core._
-import com.wordnik.swagger.core.ApiError
-import com.wordnik.swagger.core.ApiParam._
-import com.wordnik.swagger.core.ApiOperation._
+import com.wordnik.swagger.annotations._
 
 import javax.ws.rs._
 import javax.ws.rs.core.Response
@@ -40,4 +38,37 @@ class BasicResource {
     out.value = "bar"
     Response.ok.entity(out).build
   }
+
+  @POST
+  @ApiOperation(value = "Post object",
+    notes = "No details provided",
+    responseClass = "com.wordnik.test.swagger.core.testdata.SampleOutput")
+  @ApiErrors(Array(
+    new ApiError(code = 400, reason = "Invalid ID"),
+    new ApiError(code = 404, reason = "object not found")))
+  def postTest(
+               @ApiParam(value = "sample input data", required = true)input: SampleInput) = {
+    val out = new SampleOutput
+    out.name = "foo"
+    out.value = "bar"
+    Response.ok.entity(out).build
+  }
+
+  @GET
+  @Path("/getStringList")
+  @ApiOperation(value = "Get object by ID",
+    notes = "No details provided",
+    responseClass = "String",
+    multiValueResponse =  true)
+  @ApiErrors(Array(
+    new ApiError(code = 400, reason = "Invalid ID"),
+    new ApiError(code = 404, reason = "object not found")))
+  def getStringList() = {
+    val out = new java.util.ArrayList[String]()
+    out.add("foo")
+    out.add("bar")
+    Response.ok.entity(out).build
+  }
+
+
 }

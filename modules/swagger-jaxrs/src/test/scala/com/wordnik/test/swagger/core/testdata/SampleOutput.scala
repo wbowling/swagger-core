@@ -16,8 +16,7 @@
 
 package com.wordnik.test.swagger.core.testdata
 
-import com.wordnik.swagger.core._
-
+import com.wordnik.swagger.annotations._
 
 import javax.xml.bind.annotation._
 

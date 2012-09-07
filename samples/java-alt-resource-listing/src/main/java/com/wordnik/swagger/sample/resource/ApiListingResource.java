@@ -1,6 +1,6 @@
 package com.wordnik.swagger.sample.resource;
 
-import com.wordnik.swagger.core.*;
+import com.wordnik.swagger.annotations.*;
 import com.wordnik.swagger.jaxrs.*;
 
 import javax.ws.rs.*;

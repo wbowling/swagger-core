@@ -16,12 +16,11 @@
 
 package com.wordnik.swagger.sample.model;
 
-import com.wordnik.swagger.core.ApiProperty;
-import com.wordnik.swagger.core.ApiProperty.*;
+import com.wordnik.swagger.annotations.*;
 
 import javax.xml.bind.annotation.*;
 
-@XmlRootElement(name = "user")
+@XmlRootElement(name = "User")
 public class User {
 	private long id;
 	private String username;

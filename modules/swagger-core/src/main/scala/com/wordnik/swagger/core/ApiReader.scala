@@ -16,6 +16,7 @@
 
 package com.wordnik.swagger.core
 
+import com.wordnik.swagger.annotations._
 import com.wordnik.swagger.core._
 import com.wordnik.swagger.core.util._
 import com.wordnik.swagger.core.ApiValues._
@@ -40,7 +41,7 @@ object ApiMethodType {
 
 trait ApiSpecParserTrait extends BaseApiParser {
   private val LOGGER = LoggerFactory.getLogger(classOf[ApiSpecParserTrait])
-  // don't understand?  Ask @greggcarrier
+
   def hostClass: Class[_]
   def documentation: Documentation
   def apiEndpoint: Api
@@ -74,7 +75,7 @@ trait ApiSpecParserTrait extends BaseApiParser {
       docParam.allowableValues = convertToAllowableValues(apiParam.allowableValues)
     } catch {
       case e: RuntimeException =>
-        LOGGER.error("Allowable values annotation is wrong in method  " + method +
+        LOGGER.error("Allowable values annotation problem in method  " + method +
           "for parameter " + docParam.name)
         e.printStackTrace()
     }
@@ -111,7 +112,7 @@ trait ApiSpecParserTrait extends BaseApiParser {
           val annotatedName = ApiPropertiesReader.readName(cls)
           docOperation.responseClass = if (isResponseMultiValue) "List[" + annotatedName + "]" else annotatedName
         } catch {
-          case e: ClassNotFoundException => docOperation.responseClass = apiResponseValue
+          case e: ClassNotFoundException => docOperation.responseClass = if (isResponseMultiValue) "List[" + apiResponseValue + "]" else apiResponseValue
         }
       }
 
@@ -132,7 +133,7 @@ trait ApiSpecParserTrait extends BaseApiParser {
                 docParam.allowableValues = convertToAllowableValues(p.allowableValues)
               } catch {
                 case e: RuntimeException =>
-                  LOGGER.error("Allowable values annotation is wrong in method  " + method +
+                  LOGGER.error("Allowable values annotation problem in method  " + method +
                     "for parameter " + docParam.name)
                   e.printStackTrace()
               }

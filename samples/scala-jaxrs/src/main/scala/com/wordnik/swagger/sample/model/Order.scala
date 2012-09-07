@@ -16,8 +16,7 @@
 
 package com.wordnik.swagger.sample.model
 
-import com.wordnik.swagger.core.ApiProperty
-import com.wordnik.swagger.core.ApiProperty._
+import com.wordnik.swagger.annotations._
 
 import java.util.Date
 
@@ -25,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement._
 import javax.xml.bind.annotation.{XmlElement, XmlRootElement}
 import javax.xml.bind.annotation.XmlElement._
 
-@XmlRootElement(name = "order")
+@XmlRootElement(name = "Order")
 class Order {
   private var id:Long = 0
   private var petId:Long = 0

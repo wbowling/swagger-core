@@ -16,17 +16,13 @@
 
 package com.wordnik.swagger.sample.model;
 
-import com.wordnik.swagger.core.ApiProperty;
-
-import com.wordnik.swagger.core.ApiProperty.*;
+import com.wordnik.swagger.annotations.*;
 
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement.*;
 import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.XmlElement.*;
 
-@XmlRootElement(name = "order")
+@XmlRootElement(name = "Order")
 public class Order {
 	private long id;
 	private long petId;

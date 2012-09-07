@@ -16,10 +16,9 @@
 
 package com.wordnik.swagger.sample.resource
 
-import com.wordnik.swagger.core.ApiOperation._
-import com.wordnik.swagger.core.ApiError._
 import com.wordnik.swagger.core._
-import com.wordnik.swagger.core.ApiParam._
+import com.wordnik.swagger.annotations._
+import com.wordnik.swagger.core.util.RestResourceUtil
 import com.wordnik.swagger.jaxrs._
 import com.wordnik.swagger.sample.model.User
 import com.wordnik.swagger.sample.data.UserData
@@ -29,21 +28,13 @@ import com.sun.jersey.spi.resource.Singleton
 
 import javax.ws.rs.core.Response
 import javax.ws.rs._
-import util.RestResourceUtil
-/**
- * User: ramesh
- * Date: 7/29/11
- * Time: 5:23 PM
- */
 
 trait UserResource extends RestResourceUtil {
-  var userData = new UserData
-
   @POST
   @ApiOperation(value = "Create user", notes = "This can only be done by the logged in user.")
   def createUser(
     @ApiParam(value = "Created user object", required = true) user: User) = {
-    userData.addUser(user)
+    UserData.addUser(user)
     Response.ok.entity("").build
   }
 
@@ -56,7 +47,7 @@ trait UserResource extends RestResourceUtil {
   def updateUser(
     @ApiParam(value = "name that need to be deleted", required = true)@PathParam("username") username: String,
     @ApiParam(value = "Updated user object", required = true) user: User) = {
-    userData.addUser(user)
+    UserData.addUser(user)
     Response.ok.entity("").build
   }
 
@@ -68,7 +59,7 @@ trait UserResource extends RestResourceUtil {
     new ApiError(code = 404, reason = "User not found")))
   def deleteUser(
     @ApiParam(value = "The name that needs to be deleted", required = true)@PathParam("username") username: String) = {
-    userData.removeUser(username)
+    UserData.removeUser(username)
     Response.ok.entity("").build
   }
 
@@ -80,7 +71,7 @@ trait UserResource extends RestResourceUtil {
     new ApiError(code = 404, reason = "User not found")))
   def getUserByName(
     @ApiParam(value = "The name that needs to be fetched. Use user1 for testing. ", required = true)@PathParam("username") username: String) = {
-    var user = userData.findUserByName(username)
+    var user = UserData.findUserByName(username)
     if (null != user) {
       Response.ok.entity(user).build
     } else {

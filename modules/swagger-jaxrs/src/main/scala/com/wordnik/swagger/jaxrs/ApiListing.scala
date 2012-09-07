@@ -17,6 +17,8 @@
 package com.wordnik.swagger.jaxrs
 
 import com.wordnik.swagger.core._
+import com.wordnik.swagger.core.util.TypeUtil
+import com.wordnik.swagger.annotations._
 
 import org.slf4j.LoggerFactory
 
@@ -39,11 +41,14 @@ trait ApiListing {
     @Context headers: HttpHeaders,
     @Context uriInfo: UriInfo): Response = {
 
-    val configReader = ConfigReaderFactory.getConfigReader(sc)
-    val apiVersion = configReader.getApiVersion()
-    val swaggerVersion = configReader.getSwaggerVersion()
-    val basePath = configReader.getBasePath()
-    val apiFilterClassName = configReader.getApiFilterClassName()
+    val reader = ConfigReaderFactory.getConfigReader(sc)
+    val apiVersion = reader.getApiVersion()
+    val swaggerVersion = reader.getSwaggerVersion()
+    val basePath = reader.getBasePath()
+    val apiFilterClassName = reader.getApiFilterClassName()
+
+    reader.getModelPackages.split(",").foreach(p => TypeUtil.addAllowablePackage(p))
+
     var apiFilter: AuthorizationFilter = null
     if (null != apiFilterClassName) {
       try {
@@ -56,6 +61,8 @@ trait ApiListing {
     }
 
     val resources = rc.getClasses
+    rc.getSingletons.foreach( ref => resources.add(ref.getClass))
+
     val apiListingEndpoint = this.getClass.getAnnotation(classOf[Api])
     val resourceListingType = this.getClass.getAnnotation(classOf[javax.ws.rs.Produces]).value.toSet
 
@@ -86,14 +93,12 @@ trait ApiListing {
           val resourceMediaType = {
             if (headers.getRequestHeaders().contains("Content-type")) {
               logger.debug("using content-type headers")
-
               val objs = new scala.collection.mutable.ListBuffer[String]
               headers.getRequestHeaders()("Content-type").foreach(h =>
                 h.split(",").foreach(str => objs += str.trim))
               objs.toSet
             } else if (headers.getRequestHeaders().contains("Accept")) {
               logger.debug("using accept headers")
-
               val objs = new scala.collection.mutable.ListBuffer[String]
               headers.getRequestHeaders()("Accept").foreach(h =>
                 h.split(",").foreach(str => objs += str.trim))

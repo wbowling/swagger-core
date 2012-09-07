@@ -16,10 +16,9 @@
 
 package com.wordnik.swagger.sample.model
 
-import javax.xml.bind.annotation.XmlRootElement._
-import javax.xml.bind.annotation.{XmlRootElement, XmlElement}
+import javax.xml.bind.annotation._
 
-@XmlRootElement(name = "tag")
+@XmlRootElement(name = "Tag")
 class Tag {
   private var id:Long = 0
   private var name:String = _

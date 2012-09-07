@@ -17,9 +17,7 @@
 package com.wordnik.swagger.sample.resource
 
 import com.wordnik.swagger.core._
-import com.wordnik.swagger.core.ApiError._
-import com.wordnik.swagger.core.ApiParam._
-import com.wordnik.swagger.core.ApiOperation._
+import com.wordnik.swagger.annotations._
 import com.wordnik.swagger.core.util.RestResourceUtil
 import com.wordnik.swagger.jaxrs._
 import com.wordnik.swagger.sample.data.{ PetData }
@@ -32,8 +30,6 @@ import javax.ws.rs._
 import javax.ws.rs.core.Response
 
 trait PetResource extends RestResourceUtil {
-  var petData = new PetData
-
   @GET
   @ApiOperation(value = "Find pet by ID", notes = "Returns a pet when ID < 10. " +
     "ID > 10 or nonintegers will simulate API error conditions", responseClass = "com.wordnik.swagger.sample.model.Pet")
@@ -42,7 +38,7 @@ trait PetResource extends RestResourceUtil {
     new ApiError(code = 404, reason = "Pet not found")))
   def getTest(
     @ApiParam(value = "ID of pet that needs to be fetched", required = true, allowableValues = "range[0,10]")@QueryParam("petId") petId: String) = {
-    var pet = petData.getPetbyId(getLong(0, 100000, 0, petId))
+    var pet = PetData.getPetbyId(getLong(0, 100000, 0, petId))
     if (null != pet) {
       Response.ok.entity(pet).build
     } else {
@@ -59,7 +55,7 @@ trait PetResource extends RestResourceUtil {
     new ApiError(code = 404, reason = "Pet not found")))
   def getPetById(
     @ApiParam(value = "ID of pet that needs to be fetched", required = true, allowableValues = "range[0,10]")@PathParam("petId") petId: String) = {
-    var pet = petData.getPetbyId(getLong(0, 100000, 0, petId))
+    var pet = PetData.getPetbyId(getLong(0, 100000, 0, petId))
     if (null != pet) {
       Response.ok.entity(pet).build
     } else {
@@ -73,7 +69,7 @@ trait PetResource extends RestResourceUtil {
     new ApiError(code = 405, reason = "Invalid input")))
   def addPet(
     @ApiParam(value = "Pet object that needs to be added to the store", required = true) pet: Pet) = {
-    petData.addPet(pet)
+    PetData.addPet(pet)
     Response.ok.entity("SUCCESS").build
   }
 
@@ -85,7 +81,7 @@ trait PetResource extends RestResourceUtil {
     new ApiError(code = 405, reason = "Validation exception")))
   def updatePet(
     @ApiParam(value = "Pet object that needs to be added to the store", required = true) pet: Pet) = {
-    petData.addPet(pet)
+    PetData.addPet(pet)
     Response.ok.entity("SUCCESS").build
   }
 
@@ -99,7 +95,7 @@ trait PetResource extends RestResourceUtil {
   def findPetsByStatus(
     @ApiParam(value = "Status values that need to be considered for filter", required = true, defaultValue = "available",
       allowableValues = "available,pending,sold", allowMultiple = true)@QueryParam("status") status: String) = {
-    var results = petData.findPetByStatus(status)
+    var results = PetData.findPetByStatus(status)
     Response.ok(results).build
   }
 
@@ -114,7 +110,7 @@ trait PetResource extends RestResourceUtil {
   def findPetsByTags(
     @ApiParam(value = "Tags to filter by", required = true,
       allowMultiple = true)@QueryParam("tags") tags: String) = {
-    var results = petData.findPetByTags(tags)
+    var results = PetData.findPetByTags(tags)
     Response.ok(results).build
   }
 }

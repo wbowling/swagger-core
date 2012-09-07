@@ -16,17 +16,17 @@
 
 package com.wordnik.swagger.sample.resource;
 
-import com.wordnik.swagger.core.*;
-import com.wordnik.swagger.jaxrs.*;
+import com.wordnik.swagger.annotations.*;
 import com.wordnik.swagger.sample.data.UserData;
 import com.wordnik.swagger.sample.model.User;
 import com.wordnik.swagger.sample.exception.ApiException;
 import com.wordnik.swagger.sample.exception.NotFoundException;
+import com.wordnik.swagger.jaxrs.JavaHelp;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.*;
 
-public class UserResource {
+public class UserResource extends JavaHelp {
 	static UserData userData = new UserData();
 
 	@POST
@@ -89,7 +89,7 @@ public class UserResource {
 			@ApiError(code = 400, reason = "Invalid username supplied"),
 			@ApiError(code = 404, reason = "User not found") })
 	public Response getUserByName(
-			@ApiParam(value = "The name that needs to be fetched. Use user1 for testing. ", required = true) @PathParam("username") String username) 
+			@ApiParam(value = "The name that needs to be fetched. Use user1 for testing. ", required = true) @PathParam("username") String username)
 		throws ApiException {
 		User user = userData.findUserByName(username);
 		if (null != user) {
